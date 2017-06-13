@@ -3,7 +3,7 @@
 use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-use Pragma\Dailyrecap\MailQueue
+use Pragma\Dailyrecap\MailQueue;
 
 class CreateMailQueueTable extends AbstractMigration
 {
