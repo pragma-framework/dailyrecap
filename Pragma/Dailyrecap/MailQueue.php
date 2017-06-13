@@ -21,7 +21,7 @@ class MailQueue extends Model{
 		return DB_PREFIX.self::TABLE_NAME;
 	}
 
-	public static function sendDailyRecap(DailyRecap $dailyrecap){
+	public static function sendDailyRecap(DailyRecap $dailyrecap, $title = 'Récapitulatif'){
 		$mails = self::forge()
 			->where('when', '<=', date('Y-m-d'))
 			->get_objects();
@@ -53,7 +53,7 @@ class MailQueue extends Model{
 			$mail = new Mail(
 				$from,
 				[$to],
-				'Récapitulatif',
+				$title,
 				$dailyrecap->render()
 			);
 			$mail->sendMail();
