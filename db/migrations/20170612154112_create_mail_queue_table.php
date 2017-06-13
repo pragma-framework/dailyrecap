@@ -39,7 +39,7 @@ class CreateMailQueueTable extends AbstractMigration
                     break;
                 default:
                 case 'php':
-                    $t->addColumn('id', 'char', ['limit' => 23]));
+                    $t->addColumn('id', 'char', ['limit' => 23]);
                     break;
             }
         }
