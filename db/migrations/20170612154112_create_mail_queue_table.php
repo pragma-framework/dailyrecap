@@ -52,7 +52,7 @@ class CreateMailQueueTable extends AbstractMigration
             ->addColumn('from', 'string')
             ->addColumn('to', 'text')
             ->addColumn('html', 'blob', array('limit'=>MysqlAdapter::BLOB_LONG))
-            ->addColumn('when', 'date', array('default'=>'CURRENT_TIMESTAMP'))
+            ->addColumn('when', 'date')
             ->create();
     }
 }
