@@ -1,0 +1,20 @@
+{
+    "name": "pragma-framework/dailyrecap",
+    "description": "A simple Pragma module: Dailyrecap",
+    "license": "MIT",
+    "keywords": ["pragma", "framework", "dailyrecap"],
+    "authors": [
+        {"name": "Cyril Rouyer"}
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "pragma-framework/core": "dev-master",
+        "robmorgan/phinx": "^0.8.0",
+        "pear/mail": "v1.4.0",
+        "pear/mail_mime": "v1.10.0"
+    },
+     "autoload": {
+        "psr-0" : { "Pragma\\Dailyrecap" : "." }
+    }
+}
+
