@@ -12,6 +12,6 @@ class SendController{
 		// Conditionné
 		$recap->setTemplate(__DIR__.'/default.tpl.php');
 
-		MailQueue::getInstance()->sendRecap($recap);
+		MailQueue::sendDailyRecap($recap);
 	}
 }

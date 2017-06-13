@@ -15,17 +15,17 @@ class DailyRecap {
 	}
 
 	public function setTemplate($path) {
-		$this->View->setLayout($path);
+		$this->view->setLayout($path);
 		return $this;
 	}
 
 	public function setValue($key, $value) {
-		$this->View->assign($key, $value);
+		$this->view->assign($key, $value);
 		return $this;
 	}
 
 	public function addMessage($html, $category = 0, $subject = null) {
-		$this->Messages[$category][] = $html;
+		$this->messages[$category][] = $html;
 		if(!empty($subject)){
 			$this->setCategoryLabel($category, $subject);
 		}
@@ -33,18 +33,18 @@ class DailyRecap {
 	}
 
 	public function clearMessages() {
-		$this->Messages = $this->Categories = array();
+		$this->messages = $this->categories = array();
 		return $this;
 	}
 
 	public function setCategoryLabel($category, $subject) {
-		$this->Categories[$category] = $subject;
+		$this->categories[$category] = $subject;
 		return $this;
 	}
 
 	public function render() {
-		$this->View->assign('dr_messages', $this->Messages);
-		$this->View->assign('dr_categories', $this->Categories);
-		return $this->View->compile();
+		$this->view->assign('dr_messages', $this->messages);
+		$this->view->assign('dr_categories', $this->categories);
+		return $this->view->compile();
 	}
 }

@@ -23,7 +23,6 @@ class MailQueue extends Model{
 
 	public static function sendDailyRecap(DailyRecap $dailyrecap){
 		$mails = self::forge()
-			->select()
 			->where('when', '<=', date('Y-m-d'))
 			->get_objects();
 		$recap = array();
@@ -36,9 +35,9 @@ class MailQueue extends Model{
 					$recap[$t] = array();
 				}
 				$recap[$t][] = array(
-					'category' => $t->category,
-					'subject' => $t->subject,
-					'html' => $t->html,
+					'category' => $m->category,
+					'subject' => $m->subject,
+					'html' => $m->html,
 				);
 			}
 			$m->delete();
@@ -53,7 +52,7 @@ class MailQueue extends Model{
 
 			$mail = new Mail(
 				$from,
-				$to,
+				[$to],
 				'Récapitulatif',
 				$dailyrecap->render()
 			);

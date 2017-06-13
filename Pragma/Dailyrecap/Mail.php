@@ -216,7 +216,6 @@ User <user@example.com>.
     }
 
     protected function queueMail($when){
-    	$mq = new MailQueue();
     	$mq = MailQueue::build(array(
 			'from' => $this->from,
 			'to' => json_encode($this->to),
@@ -224,6 +223,6 @@ User <user@example.com>.
 			'category' => $this->category,
 			'html' => $this->content,
 			'when' => date('Y-m-d',$when),
-		)->save();
+		))->save();
     }
 }
