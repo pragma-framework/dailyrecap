@@ -9,11 +9,7 @@ class MailQueue extends Model{
 	const TABLE_NAME = 'mail_queue';
 
 	public function __construct(){
-		parent::__construct(self::getTableName());
-
-		if(defined('PRAGMA_HISTORIC_CREATION_HOOK')){
-			$this->pushHook('before_save', PRAGMA_HISTORIC_CREATION_HOOK);
-		}
+		return parent::__construct(self::getTableName());
 	}
 
 	public static function getTableName(){
