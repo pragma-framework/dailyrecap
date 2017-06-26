@@ -194,7 +194,10 @@ User <user@example.com>.
     protected function sendMailNow(){
     	$mime = new Mail_mime();
 
+        defined('PRAGMA_RETURN_MAIL') OR define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
+
     	$mimeHeaders = array(
+            'Retunr-Path' => PRAGMA_RETURN_MAIL,
     		'From' => $this->from, // define default from
     		'Reply-to' => $this->from,
     		'To' => implode(', ',$this->to),
@@ -211,7 +214,7 @@ User <user@example.com>.
     	));
     	$headers = $mime->headers($mimeHeaders);
 
-    	$mail = PearMail::factory('mail', '-f no-reply@pragma-framework.fr'); // define _MONITORING_RETURN_MAIL
+    	$mail = PearMail::factory('mail', '-f '.PRAGMA_RETURN_MAIL);
     	return $mail->send($mimeHeaders['To'], $headers, $body);
     }
 
