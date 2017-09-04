@@ -203,6 +203,23 @@ User <user@example.com>.
     		'To' => implode(', ',$this->to),
     	);
 
+        // Add local images as attachment
+        preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
+        if(!empty($images[3])){
+            $replaceFiles = [];
+            foreach($images[3] as $img){
+                if(file_exists($img) && !parse_url($img, PHP_URL_SCHEME) && !isset($replaceFiles[$img])){ // we take only local file
+                    $cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
+                    $filename = pathinfo($img, PATHINFO_BASENAME);
+                    $mime->addHTMLImage($img, mime_content_type($img), $filename, true, $cid);
+                    $replaceFiles[$img] = "cid:".$cid;
+                }
+            }
+            if(!empty($replaceFiles)){
+                $this->content = str_replace(array_keys($replaceFiles), $replaceFiles, $this->content);
+            }
+        }
+
     	$mime->setHTMLBody($this->content);
     	$mime->setTXTBody(strip_tags(html_entity_decode($this->content)));
     	$mime->setSubject($this->subject);
