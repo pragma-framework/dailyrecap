@@ -44,6 +44,13 @@ User <user@example.com>
 	 */
 	protected $content;
 
+    /**
+     * Content of the mail
+     * Full text body for sending now or partial content for daily recap
+     * @var string
+     */
+    protected $text_content;
+
 	/**
 	 * Category of the mail for daily recap
 	 * @var integer
@@ -155,6 +162,30 @@ User <user@example.com>.
     }
 
     /**
+     * Gets the Content text of the mail.
+     *
+     * @return string
+     */
+    public function getTextContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Sets the Content text of the mail.
+     *
+     * @param string $content the text content
+     *
+     * @return self
+     */
+    public function setTextContent($textContent)
+    {
+        $this->text_content = $textContent;
+
+        return $this;
+    }
+
+    /**
      * Gets the Category of the mail for daily recap.
      *
      * @return integer
@@ -221,7 +252,10 @@ User <user@example.com>.
         }
 
     	$mime->setHTMLBody($this->content);
-    	$mime->setTXTBody(strip_tags(html_entity_decode($this->content)));
+        if(empty($this->text_content)){
+            $this->text_content = strip_tags(html_entity_decode($this->content));
+        }
+    	$mime->setTXTBody($this->text_content);
     	$mime->setSubject($this->subject);
 
     	$body = $mime->get(array(

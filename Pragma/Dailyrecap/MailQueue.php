@@ -52,6 +52,7 @@ class MailQueue extends Model{
 				$title,
 				$dailyrecap->render()
 			);
+			$mail->setTextContent($dailyrecap->getTextContent($title));
 			$mail->sendMail();
 		}
 	}

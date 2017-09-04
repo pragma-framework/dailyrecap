@@ -48,4 +48,21 @@ class DailyRecap {
 		$this->view->assign('dr_title', $title);
 		return $this->view->compile();
 	}
+
+	public function getTextContent($tile = null){
+		$text = '';
+		if(!empty($title)){
+			$text = $title."\n\n";
+		}
+		$categories = array_keys($this->messages);
+		foreach ($categories as $categ){
+            if(!empty($this->categories[$categ])){
+                $text .= sprintf(_($this->categories[$categ]),count($this->messages[$categ]))."\n";
+            }
+            foreach ($this->messages[$categ] as $m){
+                $text .= $m."\n";
+            }
+        }
+        return strip_tags(html_entity_decode($text));
+	}
 }
