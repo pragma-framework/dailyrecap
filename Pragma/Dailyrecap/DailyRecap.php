@@ -42,9 +42,10 @@ class DailyRecap {
 		return $this;
 	}
 
-	public function render() {
+	public function render($title = null) {
 		$this->view->assign('dr_messages', $this->messages);
 		$this->view->assign('dr_categories', $this->categories);
+		$this->view->assign('dr_title', $title);
 		return $this->view->compile();
 	}
 }
