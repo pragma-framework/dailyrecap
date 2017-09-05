@@ -18,6 +18,18 @@ class MailQueue extends Model{
 	}
 
 	public static function sendDailyRecap(DailyRecap $dailyrecap, $title = 'Récapitulatif'){
+		if(defined('DAILYRECAP_PREHOOK') && !empty(DAILYRECAP_PREHOOK)){
+			if(is_array(DAILYRECAP_PREHOOK)){
+				foreach(DAILYRECAP_PREHOOK as $hook){
+					if(is_callable($hook)){
+						call_user_func($hook);
+					}
+				}
+			}elseif(is_callable(DAILYRECAP_PREHOOK)){
+				call_user_func(DAILYRECAP_PREHOOK);
+			}
+		}
+
 		$mails = self::forge()
 			->where('when', '<=', date('Y-m-d'))
 			->get_objects();
