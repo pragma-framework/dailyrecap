@@ -234,6 +234,12 @@ User <user@example.com>.
     		'To' => implode(', ',$this->to),
     	);
 
+        // Test & change email for debug
+        if (defined('DEBUG_EMAIL_ADDRESS') && DEBUG_EMAIL_ADDRESS != '') {
+            $this->subject .= " (Original recipient: ".$mimeHeaders['To'].")";
+            $mimeHeaders['To'] = DEBUG_EMAIL_ADDRESS;
+        }
+
         // Add local images as attachment
         preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
         if(!empty($images[3])){
