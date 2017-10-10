@@ -3,8 +3,6 @@
 use Phinx\Migration\AbstractMigration;
 use Phinx\Db\Adapter\MysqlAdapter;
 
-use Pragma\Dailyrecap\MailQueue;
-
 class CreateMailQueueTable extends AbstractMigration
 {
     /**
@@ -32,7 +30,7 @@ class CreateMailQueueTable extends AbstractMigration
     {
         if(defined('ORM_ID_AS_UID') && ORM_ID_AS_UID){
             $strategy = defined('ORM_UID_STRATEGY') && ORM_UID_STRATEGY == 'mysql' ? 'mysql' : 'php';
-            $t = $this->table(MailQueue::getTableName(), ['id' => false, 'primary_key' => 'id']);
+            $t = $this->table('mail_queue', ['id' => false, 'primary_key' => 'id']);
             switch($strategy){
                 case 'mysql':
                     $t->addColumn('id', 'char', ['limit' => 36]);
@@ -44,7 +42,7 @@ class CreateMailQueueTable extends AbstractMigration
             }
         }
         else{
-            $t = $this->table(MailQueue::getTableName());
+            $t = $this->table('mail_queue');
         }
 
         $t->addColumn('category', 'integer', array('default'=>0))

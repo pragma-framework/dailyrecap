@@ -1,7 +1,6 @@
 <?php
 
 use Phinx\Migration\AbstractMigration;
-use Pragma\Dailyrecap\MailQueue;
 
 class UpdateCategoryToString extends AbstractMigration
 {
@@ -28,13 +27,13 @@ class UpdateCategoryToString extends AbstractMigration
      */
     public function up()
     {
-        $this->table(MailQueue::getTableName())
+        $this->table('mail_queue')
             ->changeColumn('category', 'string', ["default" => null])
             ->update();
     }
     public function down()
     {
-        $this->table(MailQueue::getTableName())
+        $this->table('mail_queue')
             ->changeColumn('category', 'integer', ["default" => 0])
             ->update();
     }
