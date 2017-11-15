@@ -228,7 +228,7 @@ User <user@example.com>.
         defined('PRAGMA_RETURN_MAIL') OR define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
 
     	$mimeHeaders = array(
-            'Retunr-Path' => PRAGMA_RETURN_MAIL,
+            'Return-Path' => PRAGMA_RETURN_MAIL,
     		'From' => $this->from, // define default from
     		'Reply-to' => $this->from,
     		'To' => implode(', ',$this->to),
