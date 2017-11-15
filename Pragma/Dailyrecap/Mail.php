@@ -1,7 +1,7 @@
 <?php
 namespace Pragma\Dailyrecap;
 
-use Mail as PearMail;
+use Mail_mail as PearMail;
 use Mail_mime;
 
 class Mail{
