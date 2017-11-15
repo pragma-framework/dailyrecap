@@ -37,7 +37,9 @@ class MailQueue extends Model{
 		$from = null;
 		foreach($mails as $m){
 			$tos = json_decode($m->to,true);
-			$from = $m->from;
+			if(!empty($m->from)){
+				$from = $m->from;
+			}
 			foreach($tos as $t){
 				if(!isset($recap[$t])){
 					$recap[$t] = array();
