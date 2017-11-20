@@ -8,7 +8,7 @@
     ],
     "require": {
         "php": ">=5.3.0",
-        "pragma-framework/core": "dev-master",
+        "pragma-framework/core": ">=1.0.0",
         "robmorgan/phinx": "^0.8.0",
         "pear/mail": "v1.4.0",
         "pear/mail_mime": "v1.10.0"
