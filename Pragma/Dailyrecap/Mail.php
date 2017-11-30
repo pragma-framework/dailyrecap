@@ -23,7 +23,7 @@ User <user@example.com>
 	protected $from;
 
 	/**
-	 * Receiver, or receivers of the mail. 
+	 * Receiver, or receivers of the mail.
 	 * @var array
 	 *
 [ user@example.com, anotheruser@example.com ]
@@ -51,11 +51,17 @@ User <user@example.com>
      */
     protected $text_content;
 
+    /**
+     * Category of the mail for daily recap
+     * @var integer
+     */
+    protected $category = 0;
+
 	/**
-	 * Category of the mail for daily recap
-	 * @var integer
+	 * Files to add as attachment
+	 * @var array
 	 */
-	protected $category = 0;
+	protected $files = [];
 
     /**
      * Gets the sender
@@ -210,6 +216,20 @@ User <user@example.com>.
     }
 
     /**
+     * Adds file as attachment
+     *
+     * @param array $file [ path, content_type, name ] The file to add
+     *
+     * @return self
+     */
+    public function addAttachment($file)
+    {
+        $this->files[] = $file;
+
+        return $this;
+    }
+
+    /**
      * Send email or store it for sending later
      * @param  string $when A date/time string. See http://php.net/strtotime
      */
@@ -263,6 +283,12 @@ User <user@example.com>.
         }
     	$mime->setTXTBody($this->text_content);
     	$mime->setSubject($this->subject);
+
+        if (sizeof($this->files)) {
+            foreach ($this->files as $file) {
+                $mime->addAttachment($file['path'], $file['c_type'], $file['name']);
+            }
+        }
 
     	$body = $mime->get(array(
     		'text_charset' => 'UTF-8',
