@@ -259,6 +259,9 @@ User <user@example.com>.
             $this->subject .= " (Original recipient: ".$mimeHeaders['To'].")";
             $mimeHeaders['To'] = DEBUG_EMAIL_ADDRESS;
         }
+        if(defined('PRAGMA_PREFIX_MAIL') && !empty(PRAGMA_PREFIX_MAIL)){
+            $this->subject = trim(trim(PRAGMA_PREFIX_MAIL)." ".$this->subject);
+        }
 
         // Add local images as attachment
         preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
