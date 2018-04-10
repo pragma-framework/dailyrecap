@@ -2,9 +2,11 @@
 namespace Pragma\Dailyrecap;
 
 use Pragma\Router\Request;
+use Pragma\Helpers\TaskLock;
 
 class SendController{
 	public static function sendRecap(){
+		TaskLock::check_lock(realpath('.').'/locks', 'dailyrecap');
 		$params = Request::getRequest()->parse_params(false);
 
 		$recap = new DailyRecap();
@@ -26,5 +28,6 @@ class SendController{
 		}else{
 			MailQueue::sendDailyRecap($recap);
 		}
+		TaskLock::flush(realpath('.').'/locks', 'dailyrecap');
 	}
 }
