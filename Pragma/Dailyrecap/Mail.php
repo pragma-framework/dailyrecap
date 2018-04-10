@@ -271,8 +271,26 @@ User <user@example.com>.
                 if(file_exists($img) && !parse_url($img, PHP_URL_SCHEME) && !isset($replaceFiles[$img])){ // we take only local file
                     $cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
                     $filename = pathinfo($img, PATHINFO_BASENAME);
-                    $mime->addHTMLImage($img, mime_content_type($img), $filename, true, $cid);
-                    $replaceFiles[$img] = "cid:".$cid;
+                    if(!isset($replaceFiles[$img])){
+                        $mime->addHTMLImage($img, mime_content_type($img), $filename, true, $cid);
+                        $replaceFiles[$img] = "cid:".$cid;
+                    }
+                }else{ // Test base64
+                    // data:image/png;base64,
+                    $imgE = explode(';', $img);
+                    if(count($imgE) == 2 && strpos(trim($imgE[0]), 'data:image/') === 0 && strpos(trim($imgE[1]), 'base64') === 0){
+                        $imgB64 = explode(',', $img);
+                        $imgB64 = trim(end($imgB64));
+                        if(!empty($imgB64)){
+                            $ext = trim(substr($imgE[0], 11));
+                            $cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
+                            if(!isset($replaceFiles[$img])){
+                                $mime->addHTMLImage(base64_decode($imgB64), trim(substr($imgE[0], 5)), $cid.".".$ext, false, $cid);
+                                $replaceFiles[$img] = "cid:".$cid;
+                            }
+                        }
+                    }
+
                 }
             }
             if(!empty($replaceFiles)){
