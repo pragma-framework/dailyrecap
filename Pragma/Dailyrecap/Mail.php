@@ -263,6 +263,10 @@ User <user@example.com>.
             $this->subject = trim(trim(PRAGMA_PREFIX_MAIL)." ".$this->subject);
         }
 
+        if(defined('PRAGMA_COPY_EMAIL') && !empty(PRAGMA_COPY_EMAIL)) {
+            $mimeHeaders['Bcc'] = PRAGMA_COPY_EMAIL;
+        }
+
         // Add local images as attachment
         preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
         if(!empty($images[3])){
