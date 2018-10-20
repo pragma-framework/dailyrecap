@@ -54,6 +54,22 @@ class DailyRecap {
 		if(!empty($title)){
 			$text = $title."\n\n";
 		}
+		
+		$categs = $this->buildCategs();
+
+		foreach ($categs as $categ){
+            if(!empty($this->categories[$categ])){
+                $text .= sprintf(_($this->categories[$categ]),count($this->messages[$categ]))."\n";
+            }
+            foreach ($this->messages[$categ] as $m){
+                $text .= $m."\n";
+            }
+        }
+        return strip_tags(html_entity_decode($text));
+	}
+
+	// Build categs based on messages & order it with hook(s)
+	protected function buildCategs(){
 		$categs = array_keys($this->messages);
 
 		if(defined('DAILYRECAP_ORDER_CATEG') && !empty(DAILYRECAP_ORDER_CATEG)){
@@ -67,15 +83,6 @@ class DailyRecap {
 				$categs = call_user_func(DAILYRECAP_ORDER_CATEG, $categs);
 			}
 		}
-
-		foreach ($categs as $categ){
-            if(!empty($this->categories[$categ])){
-                $text .= sprintf(_($this->categories[$categ]),count($this->messages[$categ]))."\n";
-            }
-            foreach ($this->messages[$categ] as $m){
-                $text .= $m."\n";
-            }
-        }
-        return strip_tags(html_entity_decode($text));
+		return $categs;
 	}
 }
