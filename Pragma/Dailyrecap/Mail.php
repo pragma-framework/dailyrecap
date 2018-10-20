@@ -174,7 +174,7 @@ User <user@example.com>.
      */
     public function getTextContent()
     {
-        return $this->content;
+        return $this->getContent();
     }
 
     /**
