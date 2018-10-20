@@ -49,7 +49,7 @@ class DailyRecap {
 		return $this->view->compile();
 	}
 
-	public function getTextContent($tile = null){
+	public function getTextContent($title = null){
 		$text = '';
 		if(!empty($title)){
 			$text = $title."\n\n";
