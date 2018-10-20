@@ -329,7 +329,7 @@ User <user@example.com>.
 	}
 
 	protected function queueMail($when){
-		$mq = MailQueue::build(array(
+		return MailQueue::build(array(
 			'from' => $this->from,
 			'to' => json_encode($this->to),
 			'subject' => $this->subject,
