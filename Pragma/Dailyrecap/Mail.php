@@ -245,7 +245,7 @@ User <user@example.com>.
     protected function sendMailNow(){
     	$mime = new Mail_mime();
 
-        defined('PRAGMA_RETURN_MAIL') OR define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
+        defined('PRAGMA_RETURN_MAIL') || define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
 
     	$mimeHeaders = array(
             'Return-Path' => PRAGMA_RETURN_MAIL,
