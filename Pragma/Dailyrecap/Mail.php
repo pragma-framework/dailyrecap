@@ -269,6 +269,33 @@ User <user@example.com>.
 			$mimeHeaders['Bcc'] = PRAGMA_COPY_EMAIL;
 		}
 
+		$this->replaceHtmlImages($mime);
+
+		$mime->setHTMLBody($this->content);
+		if(empty($this->text_content)){
+			$this->text_content = strip_tags(html_entity_decode($this->content));
+		}
+		$mime->setTXTBody($this->text_content);
+		$mime->setSubject($this->subject);
+
+		if (sizeof($this->files)) {
+			foreach ($this->files as $file) {
+				$mime->addAttachment($file['path'], $file['c_type'], $file['name']);
+			}
+		}
+
+		$body = $mime->get(array(
+			'text_charset' => self::DEFAULT_CHARSET,
+			'html_charset' => self::DEFAULT_CHARSET,
+			'head_charset' => self::DEFAULT_CHARSET,
+		));
+		$headers = $mime->headers($mimeHeaders);
+
+		$mail = PearMail::factory('mail', '-f '.PRAGMA_RETURN_MAIL);
+		return $mail->send($mimeHeaders['To'], $headers, $body);
+	}
+
+	protected function replaceHtmlImages(&$mime){
 		// Add local images as attachment
 		preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
 		if(!empty($images[3])){
@@ -303,29 +330,7 @@ User <user@example.com>.
 				$this->content = str_replace(array_keys($replaceFiles), $replaceFiles, $this->content);
 			}
 		}
-
-		$mime->setHTMLBody($this->content);
-		if(empty($this->text_content)){
-			$this->text_content = strip_tags(html_entity_decode($this->content));
-		}
-		$mime->setTXTBody($this->text_content);
-		$mime->setSubject($this->subject);
-
-		if (sizeof($this->files)) {
-			foreach ($this->files as $file) {
-				$mime->addAttachment($file['path'], $file['c_type'], $file['name']);
-			}
-		}
-
-		$body = $mime->get(array(
-			'text_charset' => self::DEFAULT_CHARSET,
-			'html_charset' => self::DEFAULT_CHARSET,
-			'head_charset' => self::DEFAULT_CHARSET,
-		));
-		$headers = $mime->headers($mimeHeaders);
-
-		$mail = PearMail::factory('mail', '-f '.PRAGMA_RETURN_MAIL);
-		return $mail->send($mimeHeaders['To'], $headers, $body);
+		return $mime;
 	}
 
 	protected function queueMail($when){
