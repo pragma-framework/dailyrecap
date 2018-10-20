@@ -12,8 +12,9 @@ class SendController{
 		$recap = new DailyRecap();
 
 		// Template
-		if(!empty($params['template']) && file_exists($params['template'])){
-			$recap->setTemplate($params['template']);
+		$tpl = isset($params['template']) ? $params['template'] : null;
+		if(!empty($tpl) && file_exists($tpl)){
+			$recap->setTemplate($tpl);
 		}elseif(defined('PRAGMA_MAIL_TEMPLATE') && file_exists(PRAGMA_MAIL_TEMPLATE)){
 			$recap->setTemplate(PRAGMA_MAIL_TEMPLATE);
 		}else{
