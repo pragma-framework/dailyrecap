@@ -54,21 +54,21 @@ class DailyRecap {
 		if(!empty($title)){
 			$text = $title."\n\n";
 		}
-		$categories = array_keys($this->messages);
+		$categs = array_keys($this->messages);
 
 		if(defined('DAILYRECAP_ORDER_CATEG') && !empty(DAILYRECAP_ORDER_CATEG)){
 			if(is_array(DAILYRECAP_ORDER_CATEG)){
 				foreach(DAILYRECAP_ORDER_CATEG as $hook){
 					if(is_callable($hook)){
-						$categories = call_user_func($hook, $categories);
+						$categs = call_user_func($hook, $categs);
 					}
 				}
 			}elseif(is_callable(DAILYRECAP_ORDER_CATEG)){
-				$categories = call_user_func(DAILYRECAP_ORDER_CATEG, $categories);
+				$categs = call_user_func(DAILYRECAP_ORDER_CATEG, $categs);
 			}
 		}
 
-		foreach ($categories as $categ){
+		foreach ($categs as $categ){
             if(!empty($this->categories[$categ])){
                 $text .= sprintf(_($this->categories[$categ]),count($this->messages[$categ]))."\n";
             }
