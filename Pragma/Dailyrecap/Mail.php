@@ -5,6 +5,8 @@ use Mail_mail as PearMail;
 use Mail_mime;
 
 class Mail{
+    const DEFAULT_CHARSET = 'UTF-8';
+
 	public function __construct($from, $to, $subject, $content, $category = 0){
 		$this->from = $from;
 		$this->to = $to;
@@ -316,9 +318,9 @@ User <user@example.com>.
         }
 
     	$body = $mime->get(array(
-    		'text_charset' => 'UTF-8',
-    		'html_charset' => 'UTF-8',
-    		'head_charset' => 'UTF-8',
+    		'text_charset' => self::DEFAULT_CHARSET,
+    		'html_charset' => self::DEFAULT_CHARSET,
+    		'head_charset' => self::DEFAULT_CHARSET,
     	));
     	$headers = $mime->headers($mimeHeaders);
 
