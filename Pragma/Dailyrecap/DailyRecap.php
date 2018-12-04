@@ -49,26 +49,15 @@ class DailyRecap {
 		return $this->view->compile();
 	}
 
-	public function getTextContent($tile = null){
+	public function getTextContent($title = null){
 		$text = '';
 		if(!empty($title)){
 			$text = $title."\n\n";
 		}
-		$categories = array_keys($this->messages);
+		
+		$categs = $this->buildCategs();
 
-		if(defined('DAILYRECAP_ORDER_CATEG') && !empty(DAILYRECAP_ORDER_CATEG)){
-			if(is_array(DAILYRECAP_ORDER_CATEG)){
-				foreach(DAILYRECAP_ORDER_CATEG as $hook){
-					if(is_callable($hook)){
-						$categories = call_user_func($hook, $categories);
-					}
-				}
-			}elseif(is_callable(DAILYRECAP_ORDER_CATEG)){
-				$categories = call_user_func(DAILYRECAP_ORDER_CATEG, $categories);
-			}
-		}
-
-		foreach ($categories as $categ){
+		foreach ($categs as $categ){
             if(!empty($this->categories[$categ])){
                 $text .= sprintf(_($this->categories[$categ]),count($this->messages[$categ]))."\n";
             }
@@ -77,5 +66,23 @@ class DailyRecap {
             }
         }
         return strip_tags(html_entity_decode($text));
+	}
+
+	// Build categs based on messages & order it with hook(s)
+	protected function buildCategs(){
+		$categs = array_keys($this->messages);
+
+		if(defined('DAILYRECAP_ORDER_CATEG') && !empty(DAILYRECAP_ORDER_CATEG)){
+			if(is_array(DAILYRECAP_ORDER_CATEG)){
+				foreach(DAILYRECAP_ORDER_CATEG as $hook){
+					if(is_callable($hook)){
+						$categs = call_user_func($hook, $categs);
+					}
+				}
+			}elseif(is_callable(DAILYRECAP_ORDER_CATEG)){
+				$categs = call_user_func(DAILYRECAP_ORDER_CATEG, $categs);
+			}
+		}
+		return $categs;
 	}
 }

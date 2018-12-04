@@ -13,11 +13,34 @@ class MailQueue extends Model{
 	}
 
 	public static function getTableName(){
-		defined('DB_PREFIX') OR define('DB_PREFIX','pragma_');
+		defined('DB_PREFIX') || define('DB_PREFIX','pragma_');
 		return DB_PREFIX.self::TABLE_NAME;
 	}
 
 	public static function sendDailyRecap(DailyRecap $dailyrecap, $title = 'Récapitulatif'){
+		self::callPreHooks();
+
+		list($recap, $from) = self::getRecapFrom();
+
+		foreach($recap as $to => $meta){
+			$dailyrecap->clearMessages();
+
+			foreach($meta as $m){
+				$dailyrecap->addMessage($m['html'], $m['category'], $m['subject']);
+			}
+
+			$mail = new Mail(
+				$from,
+				[$to],
+				$title,
+				$dailyrecap->render()
+			);
+			$mail->setTextContent($dailyrecap->getTextContent($title));
+			$mail->sendMail();
+		}
+	}
+
+	protected static function callPreHooks(){
 		if(defined('DAILYRECAP_PREHOOK') && !empty(DAILYRECAP_PREHOOK)){
 			if(is_array(DAILYRECAP_PREHOOK)){
 				foreach(DAILYRECAP_PREHOOK as $hook){
@@ -29,7 +52,9 @@ class MailQueue extends Model{
 				call_user_func(DAILYRECAP_PREHOOK);
 			}
 		}
+	}
 
+	protected static function getRecapFrom(){
 		$mails = self::forge()
 			->where('when', '<=', date('Y-m-d'))
 			->get_objects();
@@ -52,22 +77,6 @@ class MailQueue extends Model{
 			}
 			$m->delete();
 		}
-
-		foreach($recap as $to => $meta){
-			$dailyrecap->clearMessages();
-
-			foreach($meta as $m){
-				$dailyrecap->addMessage($m['html'], $m['category'], $m['subject']);
-			}
-
-			$mail = new Mail(
-				$from,
-				[$to],
-				$title,
-				$dailyrecap->render()
-			);
-			$mail->setTextContent($dailyrecap->getTextContent($title));
-			$mail->sendMail();
-		}
+		return [$recap, $from];
 	}
 }
