@@ -65,6 +65,12 @@ User <user@example.com>
 	 */
 	protected $files = [];
 
+    /**
+     * Custom headers, need to be prefixed by "X-" OR using Cc/Bcc/...
+     * @var array
+     */
+    protected $specificHeaders = [];
+
 	/**
 	 * Gets the sender
 user@example.com
@@ -231,6 +237,25 @@ User <user@example.com>.
 		return $this;
 	}
 
+    /**
+     * Gets the Specfic Headers of the mail
+     * @return array
+     */
+    public function getSpecificHeaders()
+    {
+        return $this->specificHeaders;
+    }
+
+    /**
+     * Sets the Specfic Headers of the mail
+     * @return self
+     */
+    public function setSpecificHeaders(Array $headers = [])
+    {
+        $this->specificHeaders = $headers;
+        return $this;
+    }
+
 	/**
 	 * Send email or store it for sending later
 	 * @param  string $when A date/time string. See http://php.net/strtotime
@@ -249,12 +274,15 @@ User <user@example.com>.
 
 		defined('PRAGMA_RETURN_MAIL') || define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
 
-		$mimeHeaders = array(
-			'Return-Path' => PRAGMA_RETURN_MAIL,
-			'From' => $this->from, // define default from
-			'Reply-to' => $this->from,
-			'To' => implode(', ',$this->to),
-		);
+		$mimeHeaders = array_merge(
+            $this->specificHeaders,
+            array(
+                'Return-Path' => PRAGMA_RETURN_MAIL,
+        		'From' => $this->from, // define default from
+        		'Reply-to' => $this->from,
+        		'To' => implode(', ',$this->to),
+            )
+    	);
 
 		// Test & change email for debug
 		if (defined('DEBUG_EMAIL_ADDRESS') && DEBUG_EMAIL_ADDRESS != '') {
@@ -265,6 +293,7 @@ User <user@example.com>.
 			$this->subject = trim(trim(PRAGMA_PREFIX_MAIL)." ".$this->subject);
 		}
 
+		// Deprecated: use specificHeaders
 		if(defined('PRAGMA_COPY_EMAIL') && !empty(PRAGMA_COPY_EMAIL)) {
 			$mimeHeaders['Bcc'] = PRAGMA_COPY_EMAIL;
 		}
