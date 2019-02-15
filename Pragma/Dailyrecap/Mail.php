@@ -3,6 +3,7 @@ namespace Pragma\Dailyrecap;
 
 use Mail_mail as PearMail;
 use Mail_mime;
+use \Html2Text\Html2Text;
 
 class Mail{
 	const DEFAULT_CHARSET = 'UTF-8';
@@ -302,7 +303,8 @@ User <user@example.com>.
 
 		$mime->setHTMLBody($this->content);
 		if(empty($this->text_content)){
-			$this->text_content = strip_tags(html_entity_decode($this->content));
+			$html = new Html2Text($this->content);
+			$this->text_content = $html->getText();
 		}
 		$mime->setTXTBody($this->text_content);
 		$mime->setSubject($this->subject);
