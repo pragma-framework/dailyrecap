@@ -260,13 +260,14 @@ User <user@example.com>.
 	/**
 	 * Send email or store it for sending later
 	 * @param  string $when A date/time string. See http://php.net/strtotime
+	 * @return boolean
 	 */
 	public function sendMail($when = "now") {
 		$when = strtotime($when);
 		if($when <= time()){
-			$this->sendMailNow();
+			return $this->sendMailNow();
 		}else{
-			$this->queueMail($when);
+			return !$this->queueMail($when)->is_new();
 		}
 	}
 
