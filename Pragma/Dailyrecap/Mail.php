@@ -289,7 +289,7 @@ User <user@example.com>.
 		// Test & change email for debug
 		if (defined('DEBUG_EMAIL_ADDRESS') && DEBUG_EMAIL_ADDRESS != '') {
 			$this->subject .= " (Original recipient: ".$mimeHeaders['To'].")";
-			$mimeHeaders['To'] = DEBUG_EMAIL_ADDRESS;
+			$mimeHeaders['To'] = str_replace(';', ',', DEBUG_EMAIL_ADDRESS);
 		}
 		if(defined('PRAGMA_PREFIX_MAIL') && !empty(PRAGMA_PREFIX_MAIL)){
 			$this->subject = trim(trim(PRAGMA_PREFIX_MAIL)." ".$this->subject);
