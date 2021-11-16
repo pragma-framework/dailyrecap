@@ -14,6 +14,10 @@ class Mail{
 		$this->subject = $subject;
 		$this->content = $content;
 		$this->category = $category;
+
+		if(defined('PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK') && !empty(PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK)) {
+			$this->setFilterRecipientsCallback(PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK);
+		}
 	}
 
 	/**
@@ -71,6 +75,13 @@ User <user@example.com>
      * @var array
      */
     protected $specificHeaders = [];
+
+
+    /**
+     * Callback allowing to filter recipient at the last minute
+     * @var array
+     */
+    protected $filterRecipientsCallback = null;
 
 	/**
 	 * Gets the sender
@@ -257,6 +268,18 @@ User <user@example.com>.
         return $this;
     }
 
+    /**
+     * Sets the fillter recipients callback
+     * @param callable $callback A user function which will be called before sending the email or queuing the message
+     * @return self
+     */
+    public function setFilterRecipientsCallback(callable $callback) {
+    	if(is_callable($callback)) {
+    		$this->filterRecipientsCallback = $callback;
+    	}
+    	return $this;
+    }
+
 	/**
 	 * Send email or store it for sending later
 	 * @param  string $when A date/time string. See http://php.net/strtotime
@@ -275,6 +298,14 @@ User <user@example.com>.
 		$mime = new Mail_mime();
 
 		defined('PRAGMA_RETURN_MAIL') || define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
+
+		if(!empty($this->filterRecipientsCallback)) {
+    		$this->to = call_user_func($this->filterRecipientsCallback, $this->to);
+    	}
+
+    	if(empty($this->to)) {
+    		return false;
+    	}
 
 		$mimeHeaders = array_merge(
             $this->specificHeaders,
@@ -366,6 +397,14 @@ User <user@example.com>.
 	}
 
 	protected function queueMail($when){
+		if(!empty($this->filterRecipientsCallback)) {
+    		$this->to = call_user_func($this->filterRecipientsCallback, $this->to);
+    	}
+
+    	if(empty($this->to)) {
+    		return MailQueue::build([]);
+    	}
+
 		return MailQueue::build(array(
 			'from' => $this->from,
 			'to' => json_encode($this->to),
