@@ -5,70 +5,72 @@ use Mail_mail as PearMail;
 use Mail_mime;
 use \Html2Text\Html2Text;
 
-class Mail{
-	const DEFAULT_CHARSET = 'UTF-8';
+class Mail
+{
+    const DEFAULT_CHARSET = 'UTF-8';
 
-	public function __construct($from, $to, $subject, $content, $category = 0){
-		$this->from = $from;
-		$this->to = $to;
-		$this->subject = $subject;
-		$this->content = $content;
-		$this->category = $category;
+    public function __construct($from, $to, $subject, $content, $category = 0)
+    {
+        $this->from = $from;
+        $this->to = $to;
+        $this->subject = $subject;
+        $this->content = $content;
+        $this->category = $category;
 
-		if(defined('PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK') && !empty(PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK)) {
-			$this->setFilterRecipientsCallback(PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK);
-		}
-	}
+        if (defined('PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK') && !empty(PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK)) {
+            $this->setFilterRecipientsCallback(PRAGMA_MAIL_FILTER_RECIPIENTS_CALLBACK);
+        }
+    }
 
-	/**
-	 * the sender
-	 * @var string
-	 *
+    /**
+     * the sender
+     * @var string
+     *
 user@example.com
 User <user@example.com>
-	 */
-	protected $from;
+     */
+    protected $from;
 
-	/**
-	 * Receiver, or receivers of the mail.
-	 * @var array
-	 *
+    /**
+     * Receiver, or receivers of the mail.
+     * @var array
+     *
 [ user@example.com, anotheruser@example.com ]
 [ User <user@example.com>, Another User <anotheruser@example.com> ]
-	 */
-	protected $to;
+     */
+    protected $to;
 
-	/**
-	 * Subject of the mail
-	 * @var string
-	 */
-	protected $subject;
+    /**
+     * Subject of the mail
+     * @var string
+     */
+    protected $subject;
 
-	/**
-	 * Content of the mail
-	 * Full html body for sending now or partial content for daily recap
-	 * @var string
-	 */
-	protected $content;
+    /**
+     * Content of the mail
+     * Full html body for sending now or partial content for daily recap
+     * @var string
+     */
+    protected $content;
 
-	/**
-	 * Content of the mail
-	 * Full text body for sending now or partial content for daily recap
-	 * @var string
-	 */
-	protected $text_content;
+    /**
+     * Content of the mail
+     * Full text body for sending now or partial content for daily recap
+     * @var string
+     */
+    protected $text_content;
 
-	/**
-	 * Category of the mail for daily recap
-	 * @var integer
-	 */
-	protected $category = 0;
+    /**
+     * Category of the mail for daily recap
+     * @var integer
+     */
+    protected $category = 0;
 
-	/**
-	 * Files to add as attachment
-	 * @var array
-	 */
-	protected $files = [];
+    /**
+     * Files to add as attachment
+     * @var array
+     */
+    protected $files = [];
 
     /**
      * Custom headers, need to be prefixed by "X-" OR using Cc/Bcc/...
@@ -83,171 +85,171 @@ User <user@example.com>
      */
     protected $filterRecipientsCallback = null;
 
-	/**
-	 * Gets the sender
+    /**
+     * Gets the sender
 user@example.com
 User <user@example.com>.
-	 *
-	 * @return string
-	 */
-	public function getFrom()
-	{
-		return $this->from;
-	}
+     *
+     * @return string
+     */
+    public function getFrom()
+    {
+        return $this->from;
+    }
 
-	/**
-	 * Sets the sender
+    /**
+     * Sets the sender
 user@example.com
 User <user@example.com>.
-	 *
-	 * @param string $from the from
-	 *
-	 * @return self
-	 */
-	public function setFrom($from)
-	{
-		$this->from = $from;
+     *
+     * @param string $from the from
+     *
+     * @return self
+     */
+    public function setFrom($from)
+    {
+        $this->from = $from;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the Receiver, or receivers of the mail
+    /**
+     * Gets the Receiver, or receivers of the mail
 [ user@example.com, anotheruser@example.com ]
 [ User <user@example.com>, Another User <anotheruser@example.com> ].
-	 *
-	 * @return array
-	 */
-	public function getTo()
-	{
-		return $this->to;
-	}
+     *
+     * @return array
+     */
+    public function getTo()
+    {
+        return $this->to;
+    }
 
-	/**
-	 * Sets the Receiver, or receivers of the mail
+    /**
+     * Sets the Receiver, or receivers of the mail
 [ user@example.com, anotheruser@example.com ]
 [ User <user@example.com>, Another User <anotheruser@example.com> ].
-	 *
-	 * @param array $to the to
-	 *
-	 * @return self
-	 */
-	public function setTo(array $to)
-	{
-		$this->to = $to;
+     *
+     * @param array $to the to
+     *
+     * @return self
+     */
+    public function setTo(array $to)
+    {
+        $this->to = $to;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the Subject of the mail.
-	 *
-	 * @return string
-	 */
-	public function getSubject()
-	{
-		return $this->subject;
-	}
+    /**
+     * Gets the Subject of the mail.
+     *
+     * @return string
+     */
+    public function getSubject()
+    {
+        return $this->subject;
+    }
 
-	/**
-	 * Sets the Subject of the mail.
-	 *
-	 * @param string $subject the subject
-	 *
-	 * @return self
-	 */
-	public function setSubject($subject)
-	{
-		$this->subject = $subject;
+    /**
+     * Sets the Subject of the mail.
+     *
+     * @param string $subject the subject
+     *
+     * @return self
+     */
+    public function setSubject($subject)
+    {
+        $this->subject = $subject;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the Content of the mail.
-	 *
-	 * @return string
-	 */
-	public function getContent()
-	{
-		return $this->content;
-	}
+    /**
+     * Gets the Content of the mail.
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
 
-	/**
-	 * Sets the Content of the mail.
-	 *
-	 * @param string $content the content
-	 *
-	 * @return self
-	 */
-	public function setContent($content)
-	{
-		$this->content = $content;
+    /**
+     * Sets the Content of the mail.
+     *
+     * @param string $content the content
+     *
+     * @return self
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the Content text of the mail.
-	 *
-	 * @return string
-	 */
-	public function getTextContent()
-	{
-		return $this->text_content;
-	}
+    /**
+     * Gets the Content text of the mail.
+     *
+     * @return string
+     */
+    public function getTextContent()
+    {
+        return $this->text_content;
+    }
 
-	/**
-	 * Sets the Content text of the mail.
-	 *
-	 * @param string $content the text content
-	 *
-	 * @return self
-	 */
-	public function setTextContent($textContent)
-	{
-		$this->text_content = $textContent;
+    /**
+     * Sets the Content text of the mail.
+     *
+     * @param string $content the text content
+     *
+     * @return self
+     */
+    public function setTextContent($textContent)
+    {
+        $this->text_content = $textContent;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Gets the Category of the mail for daily recap.
-	 *
-	 * @return integer
-	 */
-	public function getCategory()
-	{
-		return $this->category;
-	}
+    /**
+     * Gets the Category of the mail for daily recap.
+     *
+     * @return integer
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
 
-	/**
-	 * Sets the Category of the mail for daily recap.
-	 *
-	 * @param integer $category the category
-	 *
-	 * @return self
-	 */
-	public function setCategory($category = 0)
-	{
-		$this->category = $category;
+    /**
+     * Sets the Category of the mail for daily recap.
+     *
+     * @param integer $category the category
+     *
+     * @return self
+     */
+    public function setCategory($category = 0)
+    {
+        $this->category = $category;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Adds file as attachment
-	 *
-	 * @param array $file [ path, content_type, name ] The file to add
-	 *
-	 * @return self
-	 */
-	public function addAttachment($file)
-	{
-		$this->files[] = $file;
+    /**
+     * Adds file as attachment
+     *
+     * @param array $file [ path, content_type, name ] The file to add
+     *
+     * @return self
+     */
+    public function addAttachment($file)
+    {
+        $this->files[] = $file;
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
      * Gets the Specfic Headers of the mail
@@ -262,7 +264,7 @@ User <user@example.com>.
      * Sets the Specfic Headers of the mail
      * @return self
      */
-    public function setSpecificHeaders(Array $headers = [])
+    public function setSpecificHeaders(array $headers = [])
     {
         $this->specificHeaders = $headers;
         return $this;
@@ -273,145 +275,149 @@ User <user@example.com>.
      * @param callable $callback A user function which will be called before sending the email or queuing the message
      * @return self
      */
-    public function setFilterRecipientsCallback(callable $callback) {
-    	if(is_callable($callback)) {
-    		$this->filterRecipientsCallback = $callback;
-    	}
-    	return $this;
+    public function setFilterRecipientsCallback(callable $callback)
+    {
+        if (is_callable($callback)) {
+            $this->filterRecipientsCallback = $callback;
+        }
+        return $this;
     }
 
-	/**
-	 * Send email or store it for sending later
-	 * @param  string $when A date/time string. See http://php.net/strtotime
-	 * @return boolean
-	 */
-	public function sendMail($when = "now") {
-		$when = strtotime($when);
-		if($when <= time()){
-			return $this->sendMailNow();
-		}else{
-			return !$this->queueMail($when)->is_new();
-		}
-	}
+    /**
+     * Send email or store it for sending later
+     * @param  string $when A date/time string. See http://php.net/strtotime
+     * @return boolean
+     */
+    public function sendMail($when = "now")
+    {
+        $when = strtotime($when);
+        if ($when <= time()) {
+            return $this->sendMailNow();
+        } else {
+            return !$this->queueMail($when)->is_new();
+        }
+    }
 
-	protected function sendMailNow(){
-		$mime = new Mail_mime();
+    protected function sendMailNow()
+    {
+        $mime = new Mail_mime();
 
-		defined('PRAGMA_RETURN_MAIL') || define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
+        defined('PRAGMA_RETURN_MAIL') || define('PRAGMA_RETURN_MAIL', 'no-reply@pragma-framework.fr');
 
-		if(!empty($this->filterRecipientsCallback)) {
-    		$this->to = call_user_func($this->filterRecipientsCallback, $this->to);
-    	}
+        if (!empty($this->filterRecipientsCallback)) {
+            $this->to = call_user_func($this->filterRecipientsCallback, $this->to);
+        }
 
-    	if(empty($this->to)) {
-    		return false;
-    	}
+        if (empty($this->to)) {
+            return false;
+        }
 
-		$mimeHeaders = array_merge(
+        $mimeHeaders = array_merge(
             $this->specificHeaders,
             array(
                 'Return-Path' => PRAGMA_RETURN_MAIL,
-        		'From' => $this->from, // define default from
-        		'Reply-to' => $this->from,
-        		'To' => implode(', ',$this->to),
+                'From' => $this->from, // define default from
+                'Reply-to' => defined('PRAGMA_REPLY_MAIL') && !empty(PRAGMA_REPLY_MAIL) ? PRAGMA_REPLY_MAIL : $this->from,
+                'To' => implode(', ', $this->to),
             )
-    	);
+        );
 
-		// Test & change email for debug
-		if (defined('DEBUG_EMAIL_ADDRESS') && DEBUG_EMAIL_ADDRESS != '') {
-			$this->subject .= " (Original recipient: ".$mimeHeaders['To'].")";
-			$mimeHeaders['To'] = str_replace(';', ',', DEBUG_EMAIL_ADDRESS);
-		}
-		if(defined('PRAGMA_PREFIX_MAIL') && !empty(PRAGMA_PREFIX_MAIL)){
-			$this->subject = trim(trim(PRAGMA_PREFIX_MAIL)." ".$this->subject);
-		}
+        // Test & change email for debug
+        if (defined('DEBUG_EMAIL_ADDRESS') && DEBUG_EMAIL_ADDRESS != '') {
+            $this->subject .= " (Original recipient: ".$mimeHeaders['To'].")";
+            $mimeHeaders['To'] = str_replace(';', ',', DEBUG_EMAIL_ADDRESS);
+        }
+        if (defined('PRAGMA_PREFIX_MAIL') && !empty(PRAGMA_PREFIX_MAIL)) {
+            $this->subject = trim(trim(PRAGMA_PREFIX_MAIL)." ".$this->subject);
+        }
 
-		// Deprecated: use specificHeaders
-		if(defined('PRAGMA_COPY_EMAIL') && !empty(PRAGMA_COPY_EMAIL)) {
-			$mimeHeaders['Bcc'] = PRAGMA_COPY_EMAIL;
-		}
+        // Deprecated: use specificHeaders
+        if (defined('PRAGMA_COPY_EMAIL') && !empty(PRAGMA_COPY_EMAIL)) {
+            $mimeHeaders['Bcc'] = PRAGMA_COPY_EMAIL;
+        }
 
-		$this->replaceHtmlImages($mime);
+        $this->replaceHtmlImages($mime);
 
-		$mime->setHTMLBody($this->content);
-		if(empty($this->text_content)){
-			$html = new Html2Text($this->content);
-			$this->text_content = $html->getText();
-		}
-		$mime->setTXTBody($this->text_content);
-		$mime->setSubject($this->subject);
+        $mime->setHTMLBody($this->content);
+        if (empty($this->text_content)) {
+            $html = new Html2Text($this->content);
+            $this->text_content = $html->getText();
+        }
+        $mime->setTXTBody($this->text_content);
+        $mime->setSubject($this->subject);
 
-		if (sizeof($this->files)) {
-			foreach ($this->files as $file) {
-				$mime->addAttachment($file['path'], $file['c_type'], $file['name']);
-			}
-		}
+        if (sizeof($this->files)) {
+            foreach ($this->files as $file) {
+                $mime->addAttachment($file['path'], $file['c_type'], $file['name']);
+            }
+        }
 
-		$body = $mime->get(array(
-			'text_charset' => self::DEFAULT_CHARSET,
-			'html_charset' => self::DEFAULT_CHARSET,
-			'head_charset' => self::DEFAULT_CHARSET,
-		));
-		$headers = $mime->headers($mimeHeaders);
+        $body = $mime->get(array(
+            'text_charset' => self::DEFAULT_CHARSET,
+            'html_charset' => self::DEFAULT_CHARSET,
+            'head_charset' => self::DEFAULT_CHARSET,
+        ));
+        $headers = $mime->headers($mimeHeaders);
 
-		$mail = PearMail::factory('mail', '-f '.PRAGMA_RETURN_MAIL);
-		return $mail->send($mimeHeaders['To'], $headers, $body);
-	}
+        $mail = PearMail::factory('mail', '-f '.PRAGMA_RETURN_MAIL);
+        return $mail->send($mimeHeaders['To'], $headers, $body);
+    }
 
-	protected function replaceHtmlImages(&$mime){
-		// Add local images as attachment
-		preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
-		if(!empty($images[3])){
-			$replaceFiles = [];
-			foreach($images[3] as $img){
-				if(file_exists($img) && !parse_url($img, PHP_URL_SCHEME) && !isset($replaceFiles[$img])){ // we take only local file
-					$cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
-					$filename = pathinfo($img, PATHINFO_BASENAME);
-					if(!isset($replaceFiles[$img])){
-						$mime->addHTMLImage($img, mime_content_type($img), $filename, true, $cid);
-						$replaceFiles[$img] = "cid:".$cid;
-					}
-				}else{ // Test base64
-					// data:image/png;base64,
-					$imgE = explode(';', $img);
-					if(count($imgE) == 2 && strpos(trim($imgE[0]), 'data:image/') === 0 && strpos(trim($imgE[1]), 'base64') === 0){
-						$imgB64 = explode(',', $img);
-						$imgB64 = trim(end($imgB64));
-						if(!empty($imgB64)){
-							$ext = trim(substr($imgE[0], 11));
-							$cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
-							if(!isset($replaceFiles[$img])){
-								$mime->addHTMLImage(base64_decode($imgB64), trim(substr($imgE[0], 5)), $cid.".".$ext, false, $cid);
-								$replaceFiles[$img] = "cid:".$cid;
-							}
-						}
-					}
+    protected function replaceHtmlImages(&$mime)
+    {
+        // Add local images as attachment
+        preg_match_all('/<img(.*?)src=("|\'|)(.*?)("|\'| )(.*?)>/s', $this->content, $images);
+        if (!empty($images[3])) {
+            $replaceFiles = [];
+            foreach ($images[3] as $img) {
+                if (file_exists($img) && !parse_url($img, PHP_URL_SCHEME) && !isset($replaceFiles[$img])) { // we take only local file
+                    $cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
+                    $filename = pathinfo($img, PATHINFO_BASENAME);
+                    if (!isset($replaceFiles[$img])) {
+                        $mime->addHTMLImage($img, mime_content_type($img), $filename, true, $cid);
+                        $replaceFiles[$img] = "cid:".$cid;
+                    }
+                } else { // Test base64
+                    // data:image/png;base64,
+                    $imgE = explode(';', $img);
+                    if (count($imgE) == 2 && strpos(trim($imgE[0]), 'data:image/') === 0 && strpos(trim($imgE[1]), 'base64') === 0) {
+                        $imgB64 = explode(',', $img);
+                        $imgB64 = trim(end($imgB64));
+                        if (!empty($imgB64)) {
+                            $ext = trim(substr($imgE[0], 11));
+                            $cid = preg_replace('/[^0-9a-zA-Z]/', '', uniqid(time(), true));
+                            if (!isset($replaceFiles[$img])) {
+                                $mime->addHTMLImage(base64_decode($imgB64), trim(substr($imgE[0], 5)), $cid.".".$ext, false, $cid);
+                                $replaceFiles[$img] = "cid:".$cid;
+                            }
+                        }
+                    }
+                }
+            }
+            if (!empty($replaceFiles)) {
+                $this->content = str_replace(array_keys($replaceFiles), $replaceFiles, $this->content);
+            }
+        }
+        return $mime;
+    }
 
-				}
-			}
-			if(!empty($replaceFiles)){
-				$this->content = str_replace(array_keys($replaceFiles), $replaceFiles, $this->content);
-			}
-		}
-		return $mime;
-	}
+    protected function queueMail($when)
+    {
+        if (!empty($this->filterRecipientsCallback)) {
+            $this->to = call_user_func($this->filterRecipientsCallback, $this->to);
+        }
 
-	protected function queueMail($when){
-		if(!empty($this->filterRecipientsCallback)) {
-    		$this->to = call_user_func($this->filterRecipientsCallback, $this->to);
-    	}
+        if (empty($this->to)) {
+            return MailQueue::build([]);
+        }
 
-    	if(empty($this->to)) {
-    		return MailQueue::build([]);
-    	}
-
-		return MailQueue::build(array(
-			'from' => $this->from,
-			'to' => json_encode($this->to),
-			'subject' => $this->subject,
-			'category' => $this->category,
-			'html' => $this->content,
-			'when' => date('Y-m-d',$when),
-		))->save();
-	}
+        return MailQueue::build(array(
+            'from' => $this->from,
+            'to' => json_encode($this->to),
+            'subject' => $this->subject,
+            'category' => $this->category,
+            'html' => $this->content,
+            'when' => date('Y-m-d', $when),
+        ))->save();
+    }
 }
