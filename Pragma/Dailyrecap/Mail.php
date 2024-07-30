@@ -312,14 +312,14 @@ User <user@example.com>.
             return false;
         }
 
-        $mimeHeaders = array_merge(
-            $this->specificHeaders,
+	$mimeHeaders = array_merge(
             array(
                 'Return-Path' => PRAGMA_RETURN_MAIL,
                 'From' => $this->from, // define default from
                 'Reply-to' => defined('PRAGMA_REPLY_MAIL') && !empty(PRAGMA_REPLY_MAIL) ? PRAGMA_REPLY_MAIL : $this->from,
                 'To' => implode(', ', $this->to),
-            )
+            ),
+            $this->specificHeaders,
         );
 
         // Test & change email for debug
