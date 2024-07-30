@@ -317,7 +317,7 @@ User <user@example.com>.
             array(
                 'Return-Path' => PRAGMA_RETURN_MAIL,
                 'From' => $this->from, // define default from
-                'Reply-to' => defined('PRAGMA_REPLY_MAIL') && !empty(PRAGMA_REPLY_MAIL) ? PRAGMA_REPLY_MAIL : $this->from,
+		'Reply-to' => empty($this->specificHeaders['Reply-to']) ? (defined('PRAGMA_REPLY_MAIL') && !empty(PRAGMA_REPLY_MAIL) ? PRAGMA_REPLY_MAIL : $this->from) : $this->specificHeaders['Reply-to'],
                 'To' => implode(', ', $this->to),
             )
         );
