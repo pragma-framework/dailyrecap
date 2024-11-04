@@ -18,9 +18,9 @@ class MailQueue extends Model{
 	}
 
 	public static function sendDailyRecap(DailyRecap $dailyrecap, $title = 'Récapitulatif'){
-		self::callPreHooks();
+		static::callPreHooks();
 
-		list($recap, $from) = self::getRecapFrom();
+		list($recap, $from) = static::getRecapFrom();
 
 		foreach($recap as $to => $meta){
 			$dailyrecap->clearMessages();
