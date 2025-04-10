@@ -288,12 +288,12 @@ User <user@example.com>.
      * @param  string $when A date/time string. See http://php.net/strtotime
      * @return boolean
      */
-    public function sendMail($when = "now")
+    public function sendMail($when = "now", $force_queue = false)
     {
         $when = strtotime($when);
-        if ($when <= time()) {
+        if($when <= time() && ! $force_queue) {
             return $this->sendMailNow();
-        } else {
+        }else {
             return !$this->queueMail($when)->is_new();
         }
     }
