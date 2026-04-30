@@ -312,14 +312,16 @@ User <user@example.com>.
             return false;
         }
 
-	$mimeHeaders = array_merge(
-            array(
+        $mimeHeaders = array_merge(
+            [
                 'Return-Path' => PRAGMA_RETURN_MAIL,
-                'From' => $this->from, // define default from
                 'Reply-to' => defined('PRAGMA_REPLY_MAIL') && !empty(PRAGMA_REPLY_MAIL) ? PRAGMA_REPLY_MAIL : $this->from,
-                'To' => implode(', ', $this->to),
-            ),
+            ],
             $this->specificHeaders,
+            [
+                'From' => $this->from, // define default from
+                'To' => implode(', ', $this->to),
+            ],
         );
 
         // Test & change email for debug
@@ -359,7 +361,7 @@ User <user@example.com>.
         ));
         $headers = $mime->headers($mimeHeaders);
 
-        $mail = PearMail::factory('mail', '-f '.PRAGMA_RETURN_MAIL);
+        $mail = PearMail::factory('mail', ['-f ', $mimeHeaders['Return-Path']]);
         return $mail->send($mimeHeaders['To'], $headers, $body);
     }
 
